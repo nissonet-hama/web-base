@@ -9,14 +9,19 @@ module.exports = {
   module: {
     rules: [
       {
-        // 拡張子 .js の場合
         test: /\.js$/,
         use: [
           {
             loader: "babel-loader",
             options: {
+              exclude: /node_modules/,
               presets: [
-                "@babel/preset-env"
+                ["@babel/preset-env",
+                  {
+                    "useBuiltIns": "usage",
+                    "corejs": 3
+                  }
+                ]
               ]
             }
           }

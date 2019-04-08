@@ -109,7 +109,6 @@ gulp.task("image", () =>{
         verbose: true
       }
     ))
-    //.pipe(imagemin())
     .pipe(gulp.dest(dist_dir))
     .pipe(browserSync.reload({stream:true}))
   )
@@ -148,4 +147,4 @@ gulp.task("watch", () => {
 
 })
 
-gulp.task("default", gulp.series(gulp.parallel("pug", "sass", "webpack", "image", "sync", "watch"))) 
+gulp.task("default", gulp.series(gulp.parallel("pug", "sass", "webpack", "image", "sync", "watch")))
