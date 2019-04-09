@@ -33,8 +33,8 @@ const webpackConfig = require("./webpack.config")
 gulp.task("sass", () =>{
 
   const postcss_plugin = [
-    cds(),
     mqpacker(),
+    cds({removeDuplicatedProperties: true}),
     gapProperties(),
     declarationSorter({
       order: 'smacss'
@@ -123,6 +123,7 @@ gulp.task("webpack", () => {
         this.emit("end");
     })
   )
+  .pipe(gulp.dest("./"))
   .pipe(browserSync.reload({stream:true}))
 
 })
@@ -137,6 +138,19 @@ gulp.task("sync", () => {
 
 })
 
+gulp.task("font", () => {
+
+  return (
+    gulp.src(src_dir+"/**/*.+(ttf|otf|eot|woff|woff2)")
+    .pipe(plumber({
+      errorHandler: notify.onError("Error: <%= error.message %>") //<-
+    }))
+    .pipe(gulp.dest(dist_dir))
+    .pipe(browserSync.reload({stream:true}))
+  )
+
+})
+
 
 gulp.task("watch", () => {
 
@@ -144,7 +158,8 @@ gulp.task("watch", () => {
   gulp.watch(src_dir+"/**/*.pug", gulp.task("pug"))
   gulp.watch(src_dir+"/**/*.+(jpg|jpeg|png|gif|svg)", gulp.task("image"))
   gulp.watch(src_dir+"/**/*.js", gulp.task("webpack"))
+  gulp.watch(src_dir+"/**/*.+(ttf|otf|eot|woff|woff2)", gulp.task("font"))
 
 })
 
-gulp.task("default", gulp.series(gulp.parallel("pug", "sass", "webpack", "image", "sync", "watch")))
+gulp.task("default", gulp.series(gulp.parallel("pug", "sass", "webpack", "image", "sync", "font", "watch")))
